@@ -20,5 +20,5 @@ pub fn routes() -> Router {
  */
 async fn buy_product_handler(Json(params): Json<BuyProductParams>) -> Result<()> {
     let buy_product_usecase = BuyProductUseCase::new();
-    buy_product_usecase.buy(params.id, params.amount).map_err(|_| Error::BuyProductFailed)
+    buy_product_usecase.buy(params.id, params.amount).await.map_err(|_| Error::BuyProductFailed)
 }
