@@ -7,11 +7,14 @@ pub use error::{Error, Result};
 
 mod error;
 mod web;
+mod usecase;
+mod domain;
 
 #[tokio::main]
 async fn main() {
     let app = Router::new()
         .merge(web::routes_hello::routes())
+        .merge(web::routes_product::routes())
         .layer(middleware::map_response(main_response_mapper));
 
     let addr = "127.0.0.1:4000";
