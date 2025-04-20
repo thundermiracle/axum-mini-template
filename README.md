@@ -12,6 +12,12 @@ cargo install --locked bacon
 # create sqlite database
 mkdir -p data
 touch data/db.sqlite
+
+# migration
+cargo run -- migration
+
+# seeding
+cargo run -- seed
 ```
 
 ## Start
