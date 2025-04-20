@@ -14,7 +14,7 @@ mod infrastructure;
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     // SQLiteデータベースの初期化
-    let database_url = "sqlite:db.sqlite";
+    let database_url = "sqlite:data/db.sqlite";
     infrastructure::db::init_db(database_url).await?;
     infrastructure::migrations::run_migrations(database_url).await?;
     
@@ -23,7 +23,6 @@ async fn main() -> anyhow::Result<()> {
     infrastructure::seed::seed_database().await?;
 
     let app = Router::new()
-        .merge(web::routes_hello::routes())
         .merge(web::routes_product::routes())
         .layer(middleware::map_response(main_response_mapper));
 

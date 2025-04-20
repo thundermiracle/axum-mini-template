@@ -6,6 +6,14 @@
 cargo install --locked bacon
 ```
 
+## Prepare
+
+```shell
+# create sqlite database
+mkdir -p data
+touch data/db.sqlite
+```
+
 ## Start
 
 ```shell
