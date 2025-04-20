@@ -2,7 +2,7 @@ use anyhow::Result;
 use sqlx::migrate::MigrateDatabase;
 use sqlx::{Executor, Sqlite};
 
-use crate::infrastructure::db::get_db;
+use crate::infrastructure::database::db::get_db;
 
 pub async fn run_migrations(database_url: &str) -> Result<()> {
     // データベースが存在しない場合は作成

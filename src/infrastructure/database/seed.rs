@@ -2,7 +2,7 @@ use anyhow::Result;
 use chrono::Utc;
 use sqlx::Executor;
 
-use crate::infrastructure::db::get_db;
+use crate::infrastructure::database::db::get_db;
 
 pub async fn seed_database() -> Result<()> {
     let db = get_db().await?;

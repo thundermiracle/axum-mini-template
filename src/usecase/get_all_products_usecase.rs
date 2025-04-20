@@ -1,6 +1,6 @@
 use anyhow::Result;
 
-use crate::infrastructure::product_repository::ProductRepository;
+use crate::infrastructure::persistence::repositories::product_repository::ProductRepository;
 
 use super::command::get_product_command::GetProductCommand;
 
@@ -16,6 +16,7 @@ impl GetAllProductsUseCase {
     }
 
     pub async fn get_all(&self) -> Result<Vec<GetProductCommand>> {
+        print!("->> get_all_products_usecase");
         let products = self.product_repository.find_all().await?;
         Ok(products.into_iter().map(|p| p.into()).collect())
     }
