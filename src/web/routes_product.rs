@@ -1,29 +1,24 @@
+use axum::extract::Path;
 use axum::{routing::post, routing::get, Json, Router};
-use serde::Deserialize;
 
 use crate::error::{Error, Result};
 use crate::usecase::buy_product_usecase::BuyProductUseCase;
+use crate::usecase::command::buy_product_command::BuyProductCommand;
 use crate::usecase::command::get_product_command::GetProductCommand;
 use crate::usecase::get_all_products_usecase::GetAllProductsUseCase;
 
-#[derive(Debug, Deserialize)]
-pub struct BuyProductParams {
-    pub id: u32,
-    pub quantity: u32,
-}
-
 pub fn routes() -> Router {
     Router::new()
-        .route("/products/buy", post(buy_product))
+        .route("/products/{id}/buy", post(buy_product))
         .route("/products", get(get_all_products))
 }
 
 /**
  * POST /products/buy
  */
-async fn buy_product(Json(params): Json<BuyProductParams>) -> Result<()> {
+async fn buy_product(Path(id): Path<u32>, Json(command): Json<BuyProductCommand>) -> Result<()> {
     let buy_product_usecase = BuyProductUseCase::new();
-    buy_product_usecase.buy(params.id, params.quantity).await.map_err(|_| Error::BuyProductFailed)
+    buy_product_usecase.buy(id, command).await.map_err(|_| Error::BuyProductFailed)
 }
 
 /**
