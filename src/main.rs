@@ -28,6 +28,8 @@ enum Commands {
     Migration,
     /// Seed the database
     Seed,
+    /// Reset the database
+    Reset,
 }
 
 #[tokio::main]
@@ -57,6 +59,12 @@ async fn main() -> anyhow::Result<()> {
             println!("Seeding database...");
             infrastructure::database::seed::seed_database().await?;
             println!("Database seeded successfully!");
+        },
+        Commands::Reset => {
+            println!("Resetting database...");
+            infrastructure::database::clear::clear_database().await?;
+            infrastructure::database::seed::seed_database().await?;
+            println!("Database reset successfully!");
         }
     }
     
