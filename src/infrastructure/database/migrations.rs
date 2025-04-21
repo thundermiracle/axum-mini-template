@@ -21,7 +21,7 @@ pub async fn run_migrations(database_url: &str) -> Result<()> {
             name TEXT NOT NULL,
             price INTEGER NOT NULL,
             description TEXT NOT NULL,
-            amount INTEGER NOT NULL,
+            quantity INTEGER NOT NULL,
             created_at TEXT NOT NULL,
             updated_at TEXT NOT NULL
         )

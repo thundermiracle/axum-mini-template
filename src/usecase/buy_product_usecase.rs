@@ -13,10 +13,10 @@ impl BuyProductUseCase {
         }
     }
 
-    pub async fn buy(&self, product_id: u32, amount: u32) -> Result<()> {
+    pub async fn buy(&self, product_id: u32, quantity: u32) -> Result<()> {
         print!("->> buy_product_usecase");
         let mut product = self.product_repository.find_by_id(product_id).await?;
-        product.sell(amount)?;
+        product.sell(quantity)?;
         self.product_repository.save(product).await?;
         Ok(())
     }

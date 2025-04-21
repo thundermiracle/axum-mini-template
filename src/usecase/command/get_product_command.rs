@@ -7,7 +7,7 @@ pub struct GetProductCommand {
     pub name: String,
     pub price: u32,
     pub description: String,
-    pub amount: u32,
+    pub quantity: u32,
 }
 
 impl Into<GetProductCommand> for Product {
@@ -17,7 +17,7 @@ impl Into<GetProductCommand> for Product {
             name: self.name,
             price: self.price,
             description: self.description,
-            amount: self.amount,
+            quantity: self.quantity,
         }
     }
 }

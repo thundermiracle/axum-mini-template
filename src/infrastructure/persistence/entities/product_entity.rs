@@ -3,7 +3,7 @@ pub struct ProductEntity {
     pub name: String,
     pub price: u32,
     pub description: String,
-    pub amount: u32,
+    pub quantity: u32,
     pub created_at: String,
     pub updated_at: String,
 }

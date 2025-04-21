@@ -9,7 +9,7 @@ use crate::usecase::get_all_products_usecase::GetAllProductsUseCase;
 #[derive(Debug, Deserialize)]
 pub struct BuyProductParams {
     pub id: u32,
-    pub amount: u32,
+    pub quantity: u32,
 }
 
 pub fn routes() -> Router {
@@ -23,7 +23,7 @@ pub fn routes() -> Router {
  */
 async fn buy_product(Json(params): Json<BuyProductParams>) -> Result<()> {
     let buy_product_usecase = BuyProductUseCase::new();
-    buy_product_usecase.buy(params.id, params.amount).await.map_err(|_| Error::BuyProductFailed)
+    buy_product_usecase.buy(params.id, params.quantity).await.map_err(|_| Error::BuyProductFailed)
 }
 
 /**

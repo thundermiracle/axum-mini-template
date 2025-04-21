@@ -5,25 +5,25 @@ pub struct Product {
     pub name: String,
     pub price: u32,
     pub description: String,
-    pub amount: u32,
+    pub quantity: u32,
 }
 
 impl Product {
-    pub fn new(id: u32, name: String, price: u32, description: String, amount: u32) -> Self {
+    pub fn new(id: u32, name: String, price: u32, description: String, quantity: u32) -> Self {
         Self {
             id,
             name,
             price,
             description,
-            amount,
+            quantity,
         }
     }
 
-    pub fn sell(&mut self, amount: u32) -> Result<()> {
-        if amount > self.amount {
-            return Err(anyhow!("Not enough amount"));
+    pub fn sell(&mut self, quantity: u32) -> Result<()> {
+        if quantity > self.quantity {
+            return Err(anyhow!("Not enough quantity"));
         }
-        self.amount -= amount;
+        self.quantity -= quantity;
 
         Ok(())
     }

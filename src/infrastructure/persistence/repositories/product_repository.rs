@@ -20,7 +20,7 @@ impl ProductRepository {
             entity.name,
             entity.price,
             entity.description,
-            entity.amount,
+            entity.quantity,
         )
     }
 }
@@ -42,7 +42,7 @@ impl ProductRepository {
                     name: row.get("name"),
                     price: row.get("price"),
                     description: row.get("description"),
-                    amount: row.get("amount"),
+                    quantity: row.get("quantity"),
                     created_at: row.get("created_at"),
                     updated_at: row.get("updated_at"),
                 };
@@ -70,7 +70,7 @@ impl ProductRepository {
                     name: row.get("name"),
                     price: row.get("price"),
                     description: row.get("description"),
-                    amount: row.get("amount"),
+                    quantity: row.get("quantity"),
                     created_at: row.get("created_at"),
                     updated_at: row.get("updated_at"),
                 };
@@ -97,12 +97,12 @@ impl ProductRepository {
             // 更新
             Some(_) => {
                 sqlx::query(
-                    "UPDATE products SET name = ?, price = ?, description = ?, amount = ?, updated_at = ? WHERE id = ?"
+                    "UPDATE products SET name = ?, price = ?, description = ?, quantity = ?, updated_at = ? WHERE id = ?"
                 )
                 .bind(&product.name)
                 .bind(product.price)
                 .bind(&product.description)
-                .bind(product.amount)
+                .bind(product.quantity)
                 .bind(&now)
                 .bind(product.id)
                 .execute(pool)
@@ -111,12 +111,12 @@ impl ProductRepository {
             // 新規作成
             None => {
                 sqlx::query(
-                    "INSERT INTO products (name, price, description, amount, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)"
+                    "INSERT INTO products (name, price, description, quantity, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)"
                 )
                 .bind(&product.name)
                 .bind(product.price)
                 .bind(&product.description)
-                .bind(product.amount)
+                .bind(product.quantity)
                 .bind(&now)
                 .bind(&now)
                 .execute(pool)

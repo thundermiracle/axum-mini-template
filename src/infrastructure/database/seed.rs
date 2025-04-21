@@ -14,7 +14,7 @@ pub async fn seed_database() -> Result<()> {
     pool.execute(
         format!(
             r#"
-            INSERT INTO products (name, price, description, amount, created_at, updated_at)
+            INSERT INTO products (name, price, description, quantity, created_at, updated_at)
             VALUES 
             ('ノートPC', 150000, '高性能ノートパソコン', 10, '{}', '{}'),
             ('スマートフォン', 80000, '最新型スマートフォン', 20, '{}', '{}'),
