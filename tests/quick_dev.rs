@@ -7,7 +7,7 @@ async fn quick_dev() -> Result<()> {
 
     hc.do_post("/products/1/buy", json!({"quantity": 1})).await?.print().await?;
 
-    hc.do_get("/products").await?.print().await?;
+    hc.do_get("/products/1").await?.print().await?;
 
     Ok(())
 }

@@ -6,11 +6,13 @@ use crate::usecase::buy_product_usecase::BuyProductUseCase;
 use crate::usecase::command::buy_product_command::BuyProductCommand;
 use crate::usecase::command::get_product_command::GetProductCommand;
 use crate::usecase::get_all_products_usecase::GetAllProductsUseCase;
+use crate::usecase::get_product_usecase::GetProductUseCase;
 
 pub fn routes() -> Router {
     Router::new()
-        .route("/products/{id}/buy", post(buy_product))
-        .route("/products", get(get_all_products))
+    .route("/products", get(get_all_products))
+    .route("/products/{id}", get(get_product))
+    .route("/products/{id}/buy", post(buy_product))
 }
 
 /**
@@ -28,4 +30,10 @@ async fn get_all_products() -> Result<Json<Vec<GetProductCommand>>> {
     let get_all_products_usecase = GetAllProductsUseCase::new();
     let products = get_all_products_usecase.get_all().await?;
     Ok(Json(products))
+}
+
+async fn get_product(Path(id): Path<u32>) -> Result<Json<GetProductCommand>> {
+    let get_product_usecase = GetProductUseCase::new();
+    let product = get_product_usecase.get_by_id(id).await?;
+    Ok(Json(product))
 }
