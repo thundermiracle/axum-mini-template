@@ -2,7 +2,7 @@ use anyhow::Result;
 
 use crate::infrastructure::persistence::repositories::product_repository::ProductRepository;
 
-use super::command::buy_product_command::BuyProductCommand;
+use super::commands::buy_product_command::BuyProductCommand;
 
 pub struct BuyProductUseCase {
     product_repository: ProductRepository,

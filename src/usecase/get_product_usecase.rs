@@ -2,7 +2,7 @@ use anyhow::Result;
 
 use crate::infrastructure::persistence::repositories::product_repository::ProductRepository;
 
-use super::query::get_product_query::GetProductQuery;
+use super::queries::get_product_query::GetProductQuery;
 
 pub struct GetProductUseCase {
     product_repository: ProductRepository,
