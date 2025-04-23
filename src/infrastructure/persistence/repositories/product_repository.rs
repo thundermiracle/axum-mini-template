@@ -2,7 +2,7 @@ use anyhow::{anyhow, Result};
 use sqlx::Row;
 use chrono::Utc;
 
-use crate::domain::product::Product;
+use crate::domain::models::product::Product;
 use crate::infrastructure::database::db::get_db;
 use crate::infrastructure::persistence::entities::product_entity::ProductEntity;
 
