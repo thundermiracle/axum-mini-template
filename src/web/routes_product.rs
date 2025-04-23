@@ -4,7 +4,7 @@ use axum::{routing::post, routing::get, Json, Router};
 use crate::error::{Error, Result};
 use crate::usecase::buy_product_usecase::BuyProductUseCase;
 use crate::usecase::command::buy_product_command::BuyProductCommand;
-use crate::usecase::command::get_product_command::GetProductCommand;
+use crate::usecase::query::get_product_query::GetProductQuery;
 use crate::usecase::get_all_products_usecase::GetAllProductsUseCase;
 use crate::usecase::get_product_usecase::GetProductUseCase;
 
@@ -26,13 +26,13 @@ async fn buy_product(Path(id): Path<u32>, Json(command): Json<BuyProductCommand>
 /**
  * GET /products
  */
-async fn get_all_products() -> Result<Json<Vec<GetProductCommand>>> {
+async fn get_all_products() -> Result<Json<Vec<GetProductQuery>>> {
     let get_all_products_usecase = GetAllProductsUseCase::new();
     let products = get_all_products_usecase.get_all().await?;
     Ok(Json(products))
 }
 
-async fn get_product(Path(id): Path<u32>) -> Result<Json<GetProductCommand>> {
+async fn get_product(Path(id): Path<u32>) -> Result<Json<GetProductQuery>> {
     let get_product_usecase = GetProductUseCase::new();
     let product = get_product_usecase.get_by_id(id).await?;
     Ok(Json(product))

@@ -2,7 +2,7 @@ use crate::domain::product::Product;
 use serde::Serialize;
 
 #[derive(Serialize)]
-pub struct GetProductCommand {
+pub struct GetProductQuery {
     pub id: u32,
     pub name: String,
     pub price: u32,
@@ -10,9 +10,9 @@ pub struct GetProductCommand {
     pub quantity: u32,
 }
 
-impl Into<GetProductCommand> for Product {
-    fn into(self) -> GetProductCommand {
-        GetProductCommand {
+impl Into<GetProductQuery> for Product {
+    fn into(self) -> GetProductQuery {
+        GetProductQuery {
             id: self.id,
             name: self.name,
             price: self.price,
