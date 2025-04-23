@@ -1,17 +1,17 @@
 use anyhow::Result;
 
-use crate::infrastructure::persistence::repositories::product_repository::ProductRepository;
+use crate::infrastructure::persistence::SqliteProductRepository;
 
-use super::queries::get_product_query::GetProductQuery;
+use super::queries::GetProductQuery;
 
 pub struct GetProductUseCase {
-    product_repository: ProductRepository,
+    product_repository: SqliteProductRepository,
 }
 
 impl GetProductUseCase {
     pub fn new() -> Self {
         Self {
-            product_repository: ProductRepository::new(),
+            product_repository: SqliteProductRepository::new(),
         }
     }
 

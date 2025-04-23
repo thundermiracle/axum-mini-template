@@ -2,13 +2,13 @@ use anyhow::{anyhow, Result};
 use sqlx::Row;
 use chrono::Utc;
 
-use crate::domain::models::product::Product;
+use crate::domain::models::Product;
 use crate::infrastructure::database::db::get_db;
-use crate::infrastructure::persistence::entities::product_entity::ProductEntity;
+use crate::infrastructure::persistence::entities::ProductEntity;
 
-pub struct ProductRepository;
+pub struct SqliteProductRepository;
 
-impl ProductRepository {
+impl SqliteProductRepository {
     pub fn new() -> Self {
         Self {}
     }
@@ -25,7 +25,7 @@ impl ProductRepository {
     }
 }
 
-impl ProductRepository {
+impl SqliteProductRepository {
     pub async fn find_all(&self) -> Result<Vec<Product>> {
         let db = get_db().await?;
         let pool = db.get_pool();

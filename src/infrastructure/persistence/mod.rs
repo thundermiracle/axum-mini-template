@@ -1,2 +1,4 @@
 pub mod entities;
-pub mod repositories;
+mod repositories_impl;
+
+pub use self::repositories_impl::*;

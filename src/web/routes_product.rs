@@ -3,8 +3,8 @@ use axum::{routing::post, routing::get, Json, Router};
 
 use crate::error::{Error, Result};
 use crate::usecase::buy_product_usecase::BuyProductUseCase;
-use crate::usecase::commands::buy_product_command::BuyProductCommand;
-use crate::usecase::queries::get_product_query::GetProductQuery;
+use crate::usecase::commands::BuyProductCommand;
+use crate::usecase::queries::GetProductQuery;
 use crate::usecase::get_all_products_usecase::GetAllProductsUseCase;
 use crate::usecase::get_product_usecase::GetProductUseCase;
 

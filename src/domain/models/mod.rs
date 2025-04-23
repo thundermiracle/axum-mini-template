@@ -1,1 +1,3 @@
-pub mod product;
+mod product;
+
+pub use self::product::Product;
