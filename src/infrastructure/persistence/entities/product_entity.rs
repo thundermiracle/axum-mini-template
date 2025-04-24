@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub struct ProductEntity {
     pub id: u32,
     pub name: String,

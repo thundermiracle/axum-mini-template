@@ -1,14 +1,14 @@
 use axum::extract::Path;
+use axum::extract::State;
 use axum::{routing::post, routing::get, Json, Router};
+use std::sync::Arc;
 
+use crate::DI::Container;
 use crate::error::{Error, Result};
-use crate::usecase::buy_product_usecase::BuyProductUseCase;
 use crate::usecase::commands::BuyProductCommand;
 use crate::usecase::queries::GetProductQuery;
-use crate::usecase::get_all_products_usecase::GetAllProductsUseCase;
-use crate::usecase::get_product_usecase::GetProductUseCase;
 
-pub fn routes() -> Router {
+pub fn routes() -> Router<Arc<Container>> {
     Router::new()
     .route("/products", get(get_all_products))
     .route("/products/{id}", get(get_product))
@@ -18,22 +18,31 @@ pub fn routes() -> Router {
 /**
  * POST /products/buy
  */
-async fn buy_product(Path(id): Path<u32>, Json(command): Json<BuyProductCommand>) -> Result<()> {
-    let buy_product_usecase = BuyProductUseCase::new();
+async fn buy_product(
+    State(container): State<Arc<Container>>,
+    Path(id): Path<u32>, 
+    Json(command): Json<BuyProductCommand>
+) -> Result<()> {
+    let buy_product_usecase = container.create_buy_product_usecase();
     buy_product_usecase.buy(id, command).await.map_err(|_| Error::BuyProductFailed)
 }
 
 /**
  * GET /products
  */
-async fn get_all_products() -> Result<Json<Vec<GetProductQuery>>> {
-    let get_all_products_usecase = GetAllProductsUseCase::new();
+async fn get_all_products(
+    State(container): State<Arc<Container>>
+) -> Result<Json<Vec<GetProductQuery>>> {
+    let get_all_products_usecase = container.create_get_all_products_usecase();
     let products = get_all_products_usecase.get_all().await?;
     Ok(Json(products))
 }
 
-async fn get_product(Path(id): Path<u32>) -> Result<Json<GetProductQuery>> {
-    let get_product_usecase = GetProductUseCase::new();
+async fn get_product(
+    State(container): State<Arc<Container>>,
+    Path(id): Path<u32>
+) -> Result<Json<GetProductQuery>> {
+    let get_product_usecase = container.create_get_product_usecase();
     let product = get_product_usecase.get_by_id(id).await?;
     Ok(Json(product))
 }

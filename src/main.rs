@@ -4,6 +4,7 @@ use axum::{
     response::Response,
 };
 use clap::{Parser, Subcommand};
+use std::sync::Arc;
 
 pub use error::{Error, Result};
 
@@ -12,6 +13,8 @@ mod web;
 mod usecase;
 mod domain;
 mod infrastructure;
+#[allow(non_snake_case)]
+mod DI;
 
 #[derive(Parser)]
 #[command(version, about)]
@@ -38,11 +41,15 @@ async fn main() -> anyhow::Result<()> {
     let database_url = "sqlite:data/db.sqlite";
     infrastructure::database::db::init_db(database_url).await?;
     
+    // 依存関係の解決
+    let container = Arc::new(DI::get_container());
+    
     match cli.command.unwrap_or(Commands::Serve) {
         Commands::Serve => {
             let app = Router::new()
                 .merge(web::routes_product::routes())
-                .layer(middleware::map_response(main_response_mapper));
+                .layer(middleware::map_response(main_response_mapper))
+                .with_state(container);  // アプリケーション状態としてコンテナを追加
 
             let addr = "127.0.0.1:4000";
             let listener = tokio::net::TcpListener::bind(addr).await.unwrap();

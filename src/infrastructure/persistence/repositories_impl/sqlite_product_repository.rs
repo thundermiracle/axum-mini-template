@@ -5,6 +5,7 @@ use chrono::Utc;
 use crate::domain::models::Product;
 use crate::infrastructure::database::db::get_db;
 use crate::infrastructure::persistence::entities::ProductEntity;
+use crate::usecase::repositories::ProductRepository;
 
 pub struct SqliteProductRepository;
 
@@ -25,8 +26,9 @@ impl SqliteProductRepository {
     }
 }
 
-impl SqliteProductRepository {
-    pub async fn find_all(&self) -> Result<Vec<Product>> {
+#[async_trait::async_trait]
+impl ProductRepository for SqliteProductRepository {
+    async fn find_all(&self) -> Result<Vec<Product>> {
         let db = get_db().await?;
         let pool = db.get_pool();
         
@@ -54,7 +56,7 @@ impl SqliteProductRepository {
         Ok(products)
     }
 
-    pub async fn find_by_id(&self, id: u32) -> Result<Product> {
+    async fn find_by_id(&self, id: u32) -> Result<Product> {
         let db = get_db().await?;
         let pool = db.get_pool();
         
@@ -81,7 +83,7 @@ impl SqliteProductRepository {
         }
     }
 
-    pub async fn save(&self, product: Product) -> Result<Product> {
+    async fn save(&self, product: Product) -> Result<()> {
         let db = get_db().await?;
         let pool = db.get_pool();
         
@@ -124,6 +126,6 @@ impl SqliteProductRepository {
             }
         }
         
-        Ok(product)
+        Ok(())
     }
 }

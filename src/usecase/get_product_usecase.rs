@@ -1,17 +1,17 @@
 use anyhow::Result;
+use std::sync::Arc;
 
-use crate::infrastructure::persistence::SqliteProductRepository;
-
+use crate::usecase::repositories::ProductRepository;
 use super::queries::GetProductQuery;
 
 pub struct GetProductUseCase {
-    product_repository: SqliteProductRepository,
+    product_repository: Arc<dyn ProductRepository + Send + Sync>,
 }
 
 impl GetProductUseCase {
-    pub fn new() -> Self {
+    pub fn new(product_repository: Arc<dyn ProductRepository + Send + Sync>) -> Self {
         Self {
-            product_repository: SqliteProductRepository::new(),
+            product_repository,
         }
     }
 
