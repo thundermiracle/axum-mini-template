@@ -5,8 +5,8 @@ use std::sync::Arc;
 
 use crate::DI::Container;
 use crate::error::{Error, Result};
-use crate::usecase::commands::BuyProductCommand;
-use crate::usecase::queries::GetProductQuery;
+use crate::application::commands::BuyProductCommand;
+use crate::application::queries::GetProductQuery;
 
 pub fn routes() -> Router<Arc<Container>> {
     Router::new()

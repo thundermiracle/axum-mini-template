@@ -1,10 +1,10 @@
 use std::sync::Arc;
 
 use crate::infrastructure::persistence::repositories_impl::SqliteProductRepository;
-use crate::usecase::repositories::ProductRepository;
-use crate::usecase::get_product_usecase::GetProductUseCase;
-use crate::usecase::get_all_products_usecase::GetAllProductsUseCase;
-use crate::usecase::buy_product_usecase::BuyProductUseCase;
+use crate::application::repositories::ProductRepository;
+use crate::application::get_product_usecase::GetProductUseCase;
+use crate::application::get_all_products_usecase::GetAllProductsUseCase;
+use crate::application::buy_product_usecase::BuyProductUseCase;
 
 /// コンテナはアプリケーションの依存関係を管理します
 pub struct Container {

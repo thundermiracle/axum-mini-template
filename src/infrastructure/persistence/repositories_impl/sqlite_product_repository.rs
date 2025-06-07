@@ -5,7 +5,7 @@ use chrono::Utc;
 use crate::domain::models::Product;
 use crate::infrastructure::database::db::get_db;
 use crate::infrastructure::persistence::entities::ProductEntity;
-use crate::usecase::repositories::ProductRepository;
+use crate::application::repositories::ProductRepository;
 
 pub struct SqliteProductRepository;
 

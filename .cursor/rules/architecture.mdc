@@ -18,18 +18,18 @@ src/
 │   └── persistence              # Data persistence implementation
 │       ├── entities             # Database-specific entity representations
 │       └── repositories_impl    # Repository implementations
-├── usecase                      # Application use cases
+├── application                  # Application use cases
 │   ├── commands                 # Command handlers (write operations)
 │   ├── queries                  # Query handlers (read operations)
 │   └── repositories             # Repository interfaces
-└── web                          # Web-related components (API, controllers)
+└── presentation                 # Web-related components (API, controllers)
 ```
 
 ## General Architecture Rules
 
 1. **Dependency Direction**: Dependencies should point inward. Outer layers can depend on inner layers, but not vice versa:
-   - Web → Usecase → Domain
-   - Infrastructure → Usecase → Domain
+   - Presentation → Application → Domain
+   - Infrastructure → Application → Domain
 
 2. **Domain Independence**: The domain layer must not depend on any other layer.
 

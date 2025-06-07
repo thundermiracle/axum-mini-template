@@ -1,7 +1,7 @@
 use anyhow::Result;
 use std::sync::Arc;
 
-use crate::usecase::repositories::ProductRepository;
+use crate::application::repositories::ProductRepository;
 use super::commands::BuyProductCommand;
 
 pub struct BuyProductUseCase {
