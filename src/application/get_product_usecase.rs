@@ -1,7 +1,7 @@
-use anyhow::Result;
 use std::sync::Arc;
 
 use crate::application::repositories::ProductRepository;
+use crate::application::error::ApplicationError;
 use super::queries::GetProductQuery;
 
 pub struct GetProductUseCase {
@@ -15,9 +15,12 @@ impl GetProductUseCase {
         }
     }
 
-    pub async fn get_by_id(&self, id: u32) -> Result<GetProductQuery> {
+    pub async fn get_by_id(&self, id: u32) -> Result<GetProductQuery, ApplicationError> {
         print!("->> get_product_usecase");
-        let product = self.product_repository.find_by_id(id).await?;
-        Ok(product.into())
+        
+        match self.product_repository.find_by_id(id).await? {
+            Some(product) => Ok(product.into()),
+            None => Err(ApplicationError::ProductNotFound(id)),
+        }
     }
 }

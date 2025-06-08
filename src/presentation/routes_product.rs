@@ -6,7 +6,8 @@ use std::sync::Arc;
 use crate::DI::Container;
 use crate::error::{Error, Result};
 use crate::application::commands::BuyProductCommand;
-use crate::application::queries::GetProductQuery;
+use crate::application::ApplicationError;
+use crate::presentation::{ProductDto, BuyProductDto};
 
 pub fn routes() -> Router<Arc<Container>> {
     Router::new()
@@ -16,15 +17,28 @@ pub fn routes() -> Router<Arc<Container>> {
 }
 
 /**
- * POST /products/buy
+ * POST /products/{id}/buy
  */
 async fn buy_product(
     State(container): State<Arc<Container>>,
     Path(id): Path<u32>, 
-    Json(command): Json<BuyProductCommand>
+    Json(dto): Json<BuyProductDto>
 ) -> Result<()> {
     let buy_product_usecase = container.create_buy_product_usecase();
-    buy_product_usecase.buy(id, command).await.map_err(|_| Error::BuyProductFailed)
+    
+    // DTOからコマンドへの変換
+    let command = BuyProductCommand {
+        quantity: dto.quantity,
+    };
+    
+    buy_product_usecase
+        .buy(id, command)
+        .await
+        .map_err(|e| match e {
+            ApplicationError::ProductNotFound(_) => Error::NotFound,
+            ApplicationError::Domain(_) => Error::BuyProductFailed,
+            _ => Error::InternalServerError,
+        })
 }
 
 /**
@@ -32,17 +46,34 @@ async fn buy_product(
  */
 async fn get_all_products(
     State(container): State<Arc<Container>>
-) -> Result<Json<Vec<GetProductQuery>>> {
+) -> Result<Json<Vec<ProductDto>>> {
     let get_all_products_usecase = container.create_get_all_products_usecase();
-    let products = get_all_products_usecase.get_all().await?;
-    Ok(Json(products))
+    
+    let products = get_all_products_usecase
+        .get_all()
+        .await
+        .map_err(|_| Error::InternalServerError)?;
+        
+    let dtos: Vec<ProductDto> = products.into_iter().map(|p| p.into()).collect();
+    Ok(Json(dtos))
 }
 
+/**
+ * GET /products/{id}
+ */
 async fn get_product(
     State(container): State<Arc<Container>>,
     Path(id): Path<u32>
-) -> Result<Json<GetProductQuery>> {
+) -> Result<Json<ProductDto>> {
     let get_product_usecase = container.create_get_product_usecase();
-    let product = get_product_usecase.get_by_id(id).await?;
-    Ok(Json(product))
+    
+    let product = get_product_usecase
+        .get_by_id(id)
+        .await
+        .map_err(|e| match e {
+            ApplicationError::ProductNotFound(_) => Error::NotFound,
+            _ => Error::InternalServerError,
+        })?;
+        
+    Ok(Json(product.into()))
 }

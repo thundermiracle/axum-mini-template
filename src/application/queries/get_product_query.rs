@@ -1,7 +1,7 @@
 use crate::domain::models::Product;
-use serde::Serialize;
 
-#[derive(Serialize)]
+/// Application層での商品クエリオブジェクト
+/// シリアライゼーションの詳細は含まない
 pub struct GetProductQuery {
     pub id: u32,
     pub name: String,
@@ -10,14 +10,14 @@ pub struct GetProductQuery {
     pub quantity: u32,
 }
 
-impl Into<GetProductQuery> for Product {
-    fn into(self) -> GetProductQuery {
+impl From<Product> for GetProductQuery {
+    fn from(product: Product) -> GetProductQuery {
         GetProductQuery {
-            id: self.id,
-            name: self.name,
-            price: self.price,
-            description: self.description,
-            quantity: self.quantity,
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            description: product.description,
+            quantity: product.quantity,
         }
     }
 }

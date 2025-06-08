@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Result};
+use crate::domain::error::DomainError;
 
 pub struct Product {
     pub id: u32,
@@ -19,9 +19,12 @@ impl Product {
         }
     }
 
-    pub fn sell(&mut self, quantity: u32) -> Result<()> {
+    pub fn sell(&mut self, quantity: u32) -> Result<(), DomainError> {
         if quantity > self.quantity {
-            return Err(anyhow!("Not enough quantity"));
+            return Err(DomainError::InsufficientQuantity {
+                requested: quantity,
+                available: self.quantity,
+            });
         }
         self.quantity -= quantity;
 

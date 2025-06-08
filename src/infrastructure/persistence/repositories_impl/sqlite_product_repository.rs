@@ -1,4 +1,3 @@
-use anyhow::{anyhow, Result};
 use sqlx::Row;
 use chrono::Utc;
 
@@ -6,6 +5,7 @@ use crate::domain::models::Product;
 use crate::infrastructure::database::db::get_db;
 use crate::infrastructure::persistence::entities::ProductEntity;
 use crate::application::repositories::ProductRepository;
+use crate::application::error::RepositoryError;
 
 pub struct SqliteProductRepository;
 
@@ -28,13 +28,15 @@ impl SqliteProductRepository {
 
 #[async_trait::async_trait]
 impl ProductRepository for SqliteProductRepository {
-    async fn find_all(&self) -> Result<Vec<Product>> {
-        let db = get_db().await?;
+    async fn find_all(&self) -> Result<Vec<Product>, RepositoryError> {
+        let db = get_db().await
+            .map_err(|e| RepositoryError::DatabaseConnection(e.to_string()))?;
         let pool = db.get_pool();
         
         let rows = sqlx::query("SELECT * FROM products")
             .fetch_all(pool)
-            .await?;
+            .await
+            .map_err(|e| RepositoryError::QueryExecution(e.to_string()))?;
         
         let products = rows
             .iter()
@@ -56,14 +58,16 @@ impl ProductRepository for SqliteProductRepository {
         Ok(products)
     }
 
-    async fn find_by_id(&self, id: u32) -> Result<Product> {
-        let db = get_db().await?;
+    async fn find_by_id(&self, id: u32) -> Result<Option<Product>, RepositoryError> {
+        let db = get_db().await
+            .map_err(|e| RepositoryError::DatabaseConnection(e.to_string()))?;
         let pool = db.get_pool();
         
         let row = sqlx::query("SELECT * FROM products WHERE id = ?")
             .bind(id)
             .fetch_optional(pool)
-            .await?;
+            .await
+            .map_err(|e| RepositoryError::QueryExecution(e.to_string()))?;
         
         match row {
             Some(row) => {
@@ -77,14 +81,15 @@ impl ProductRepository for SqliteProductRepository {
                     updated_at: row.get("updated_at"),
                 };
                 
-                Ok(Self::entity_to_domain(entity))
+                Ok(Some(Self::entity_to_domain(entity)))
             },
-            None => Err(anyhow!("Product not found: {}", id)),
+            None => Ok(None),
         }
     }
 
-    async fn save(&self, product: Product) -> Result<()> {
-        let db = get_db().await?;
+    async fn save(&self, product: Product) -> Result<(), RepositoryError> {
+        let db = get_db().await
+            .map_err(|e| RepositoryError::DatabaseConnection(e.to_string()))?;
         let pool = db.get_pool();
         
         let now = Utc::now().to_rfc3339();
@@ -93,7 +98,8 @@ impl ProductRepository for SqliteProductRepository {
         let existing = sqlx::query("SELECT * FROM products WHERE id = ?")
             .bind(product.id)
             .fetch_optional(pool)
-            .await?;
+            .await
+            .map_err(|e| RepositoryError::QueryExecution(e.to_string()))?;
         
         match existing {
             // 更新
@@ -108,7 +114,8 @@ impl ProductRepository for SqliteProductRepository {
                 .bind(&now)
                 .bind(product.id)
                 .execute(pool)
-                .await?;
+                .await
+                .map_err(|e| RepositoryError::QueryExecution(e.to_string()))?;
             },
             // 新規作成
             None => {
@@ -122,7 +129,8 @@ impl ProductRepository for SqliteProductRepository {
                 .bind(&now)
                 .bind(&now)
                 .execute(pool)
-                .await?;
+                .await
+                .map_err(|e| RepositoryError::QueryExecution(e.to_string()))?;
             }
         }
         

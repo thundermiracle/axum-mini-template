@@ -4,3 +4,6 @@ pub mod get_all_products_usecase;
 pub mod get_product_usecase;
 pub mod queries;
 pub mod repositories;
+pub mod error;
+
+pub use error::{ApplicationError, RepositoryError};
