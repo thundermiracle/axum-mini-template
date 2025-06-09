@@ -9,7 +9,7 @@ use std::sync::Arc;
 pub use error::{Error, Result};
 
 mod error;
-mod presentation;
+mod interface_adapters;
 mod application;
 mod domain;
 mod infrastructure;
@@ -47,7 +47,7 @@ async fn main() -> anyhow::Result<()> {
     match cli.command.unwrap_or(Commands::Serve) {
         Commands::Serve => {
             let app = Router::new()
-                .merge(presentation::routes_product::routes())
+                .merge(interface_adapters::products::routes())
                 .layer(middleware::map_response(main_response_mapper))
                 .with_state(container);  // アプリケーション状態としてコンテナを追加
 
