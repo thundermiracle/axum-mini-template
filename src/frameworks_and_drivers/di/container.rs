@@ -1,10 +1,11 @@
 use std::sync::Arc;
 
-use crate::infrastructure::persistence::repositories_impl::SqliteProductRepository;
+use crate::frameworks_and_drivers::persistence::repositories_impl::SqliteProductRepository;
 use crate::application::repositories::ProductRepository;
 use crate::application::use_cases::{GetProductUseCase, GetAllProductsUseCase, BuyProductUseCase};
 
 /// コンテナはアプリケーションの依存関係を管理します
+/// Uncle Bob's Clean Architecture: Frameworks & Drivers層でDI設定
 pub struct Container {
     /// ProductRepositoryの実装
     pub product_repository: Arc<dyn ProductRepository + Send + Sync>,

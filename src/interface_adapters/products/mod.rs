@@ -2,9 +2,9 @@ pub mod controllers;
 pub mod requests;
 pub mod presenters;
 
-use axum::{Router, routing::get};
+use axum::Router;
 use std::sync::Arc;
-use crate::DI::Container;
+use crate::frameworks_and_drivers::Container;
 
 pub use controllers::{GetProductsController, GetProductController, BuyProductController};
 pub use requests::BuyProductRequest;

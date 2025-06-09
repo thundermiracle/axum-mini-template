@@ -2,8 +2,8 @@ use sqlx::Row;
 use chrono::Utc;
 
 use crate::domain::models::Product;
-use crate::infrastructure::database::db::get_db;
-use crate::infrastructure::persistence::entities::ProductEntity;
+use crate::frameworks_and_drivers::database::db::get_db;
+use crate::frameworks_and_drivers::persistence::entities::ProductEntity;
 use crate::application::repositories::ProductRepository;
 use crate::application::error::RepositoryError;
 

@@ -1,20 +1,14 @@
 use anyhow::Result;
-use sqlx::migrate::MigrateDatabase;
-use sqlx::{Executor, Sqlite};
+use sqlx::Sqlite;
 
-use crate::infrastructure::database::db::get_db;
+use crate::frameworks_and_drivers::database::db::get_db;
 
 pub async fn run_migrations(database_url: &str) -> Result<()> {
-    // データベースが存在しない場合は作成
-    if !Sqlite::database_exists(database_url).await? {
-        Sqlite::create_database(database_url).await?;
-    }
-
-    // テーブル作成
     let db = get_db().await?;
     let pool = db.get_pool();
-
-    pool.execute(
+    
+    // テーブル作成（簡単な例）
+    sqlx::query(
         r#"
         CREATE TABLE IF NOT EXISTS products (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,9 +19,11 @@ pub async fn run_migrations(database_url: &str) -> Result<()> {
             created_at TEXT NOT NULL,
             updated_at TEXT NOT NULL
         )
-        "#,
+        "#
     )
+    .execute(pool)
     .await?;
 
+    println!("Migrations completed successfully!");
     Ok(())
 } 

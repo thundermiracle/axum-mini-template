@@ -12,9 +12,7 @@ mod error;
 mod interface_adapters;
 mod application;
 mod domain;
-mod infrastructure;
-#[allow(non_snake_case)]
-mod DI;
+mod frameworks_and_drivers;
 
 #[derive(Parser)]
 #[command(version, about)]
@@ -39,10 +37,10 @@ enum Commands {
 async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
     let database_url = "sqlite:data/db.sqlite";
-    infrastructure::database::db::init_db(database_url).await?;
+    frameworks_and_drivers::database::db::init_db(database_url).await?;
     
     // 依存関係の解決
-    let container = Arc::new(DI::get_container());
+    let container = Arc::new(frameworks_and_drivers::get_container());
     
     match cli.command.unwrap_or(Commands::Serve) {
         Commands::Serve => {
@@ -59,18 +57,18 @@ async fn main() -> anyhow::Result<()> {
         },
         Commands::Migration => {
             println!("Running migrations...");
-            infrastructure::database::migrations::run_migrations(database_url).await?;
+            frameworks_and_drivers::database::migrations::run_migrations(database_url).await?;
             println!("Migrations completed successfully!");
         },
         Commands::Seed => {
             println!("Seeding database...");
-            infrastructure::database::seed::seed_database().await?;
+            frameworks_and_drivers::database::seed::seed_database().await?;
             println!("Database seeded successfully!");
         },
         Commands::Reset => {
             println!("Resetting database...");
-            infrastructure::database::clear::clear_database().await?;
-            infrastructure::database::seed::seed_database().await?;
+            frameworks_and_drivers::database::clear::clear_database().await?;
+            frameworks_and_drivers::database::seed::seed_database().await?;
             println!("Database reset successfully!");
         }
     }

@@ -2,7 +2,7 @@ use axum::extract::{Path, State};
 use axum::{routing::post, Json, Router};
 use std::sync::Arc;
 
-use crate::DI::Container;
+use crate::frameworks_and_drivers::Container;
 use crate::error::{Error, Result};
 use crate::application::commands::BuyProductCommand;
 use crate::application::ApplicationError;
