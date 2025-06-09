@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use crate::application::repositories::ProductRepository;
 use crate::application::error::ApplicationError;
-use super::commands::BuyProductCommand;
+use crate::application::commands::BuyProductCommand;
 
 pub struct BuyProductUseCase {
     product_repository: Arc<dyn ProductRepository + Send + Sync>,

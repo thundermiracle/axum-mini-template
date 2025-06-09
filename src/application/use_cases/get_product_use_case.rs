@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use crate::application::repositories::ProductRepository;
 use crate::application::error::ApplicationError;
-use super::queries::GetProductQuery;
+use crate::application::queries::GetProductQuery;
 
 pub struct GetProductUseCase {
     product_repository: Arc<dyn ProductRepository + Send + Sync>,
